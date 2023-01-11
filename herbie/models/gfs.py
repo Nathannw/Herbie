@@ -12,16 +12,28 @@ class gdas:
             "aws document": "https://registry.opendata.aws/noaa-gfs-bdp-pds",
         }
         self.PRODUCTS = {
-            "pgrb2.0p25": "common fields, 0.25 degree resolution",
-            "pgrb2.1p00": "common fields, 1.00 degree resolution",
+            "atmos.25": "common fields, 0.25 degree resolution",
+            "atmos1": "common fields, 1.00 degree resolution",
         }
+
+        products = {
+            "atmos.25": "pgrb2.0p25",
+            "atmos1": "pgrb2.1p00",
+        }
+        # Get *actual* name of GDAS product.
+        self.product = products.get(self.product)
+
+        filedir = f"gdas.{self.date:%Y%m%d/%H}/atmos}"
+        filename = f"gdas.t{self.date:%H}z.{self.product}.f{self.fxx:03d}"
+        filepath = f"{filedir}/{filename}"
+
         self.SOURCES = {
-            "aws": f"https://noaa-gfs-bdp-pds.s3.amazonaws.com/gdas.{self.date:%Y%m%d/%H}/atmos/gdas.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
-            "aws-old": f"https://noaa-gfs-bdp-pds.s3.amazonaws.com/gdas.{self.date:%Y%m%d/%H}/gdas.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
-            "ftpprd": f"https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/gdas.{self.date:%Y%m%d/%H}/atmos/gdas.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
-            "nomads": f"https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/gdas.{self.date:%Y%m%d/%H}/atmos/gdas.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
-            "google": f"https://storage.googleapis.com/global-forecast-system/gdas.{self.date:%Y%m%d/%H}/atmos/gdas.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
-            "azure": f"https://noaagfs.blob.core.windows.net/gfs/gdas.{self.date:%Y%m%d/%H}/atmos/gfs.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
+            "aws": f"https://noaa-gfs-bdp-pds.s3.amazonaws.com/{filepath}",
+            "aws-old": f"https://noaa-gfs-bdp-pds.s3.amazonaws.com/gdas.{self.date:%Y%m%d/%H}/{filename}",
+            "ftpprd": f"https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/{filepath}",
+            "nomads": f"https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/{filepath}",
+            "google": f"https://storage.googleapis.com/global-forecast-system/{filepath}",
+            "azure": f"https://noaagfs.blob.core.windows.net/gfs/{filepath}",
         }
         self.IDX_SUFFIX = [".idx"]
         self.LOCALFILE = f"{self.get_remoteFileName}"
@@ -36,27 +48,45 @@ class gfs:
             "azure document": "https://github.com/microsoft/AIforEarthDatasets#noaa-global-forecast-system-gfs",
             "aws document": "https://registry.opendata.aws/noaa-gfs-bdp-pds",
         }
+        # I want the product names to be simplified.
         self.PRODUCTS = {
-            "pgrb2.0p25": "common fields, 0.25 degree resolution",
-            "pgrb2.0p50": "common fields, 0.50 degree resolution",
-            "pgrb2.1p00": "common fields, 1.00 degree resolution",
-            "pgrb2b.0p25": "uncommon fields, 0.25 degree resolution",
-            "pgrb2b.0p50": "uncommon fields, 0.50 degree resolution",
-            "pgrb2b.1p00": "uncommon fields, 1.00 degree resolution",
-            "pgrb2full.0p50": "combined grids of 0.50 resolution",
+            "atmos.25": "common fields, 0.25 degree resolution",
+            "atmos.5": "common fields, 0.50 degree resolution",
+            "atmos1": "common fields, 1.00 degree resolution",
+            "atmos.25b": "uncommon fields, 0.25 degree resolution",
+            "atmos.5b": "uncommon fields, 0.50 degree resolution",
+            "atmos1b": "uncommon fields, 1.00 degree resolution",
+            "atmos.5_full": "combined grids of 0.50 resolution",
         }
+
+        products = {
+            "atmos.25": "pgrb2.0p25",
+            "atmos.5": "pgrb2.0p50",
+            "atmos1": "pgrb2.1p00",
+            "atmos.25": "pgrb2b.0p25",
+            "atmos.5b": "pgrb2b.0p50",
+            "atmos1b": "pgrb2b.1p00",
+            "atmos.5_full": "pgrb2full.0p50",
+        }
+        # Get *actual* name of GFS product.
+        self.product = products.get(self.product)
+
+        filedir = f"gfs.{self.date:%Y%m%d/%H}/atmos}"
+        filename = f"gfs.t{self.date:%H}z.{self.product}.f{self.fxx:03d}"
+        filepath = f"{filedir}/{filename}"
+
         self.SOURCES = {
-            "aws": f"https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.{self.date:%Y%m%d/%H}/atmos/gfs.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
-            "aws-old": f"https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.{self.date:%Y%m%d/%H}/gfs.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
-            "ftpprd": f"https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/gfs.{self.date:%Y%m%d/%H}/atmos/gfs.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
-            "nomads": f"https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/gfs.{self.date:%Y%m%d/%H}/atmos/gfs.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
-            "google": f"https://storage.googleapis.com/global-forecast-system/gfs.{self.date:%Y%m%d/%H}/atmos/gfs.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
-            "azure": f"https://noaagfs.blob.core.windows.net/gfs/gfs.{self.date:%Y%m%d/%H}/atmos/gfs.t{self.date:%H}z.{self.product}.f{self.fxx:03d}",
+            "aws": f"https://noaa-gfs-bdp-pds.s3.amazonaws.com/{filepath}",
+            "aws-old": f"https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.{self.date:%Y%m%d/%H}/{filename}",
+            "ftpprd": f"https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/{filepath}",
+            "nomads": f"https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/{filepath}",
+            "google": f"https://storage.googleapis.com/global-forecast-system/{filepath}",
+            "azure": f"https://noaagfs.blob.core.windows.net/gfs/{filepath}",
         }
         self.IDX_SUFFIX = [".idx"]
         self.LOCALFILE = f"{self.get_remoteFileName}"
 
-
+#TODO: consolidate this into GFS model, and use product names "wave.arctic", "wave.25", etc.
 class gfs_wave:
     def template(self):
         self.DESCRIPTION = "Global Forecast System - Wave Products"
